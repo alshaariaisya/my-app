@@ -1,10 +1,11 @@
-
 import streamlit as st
 from ultralytics import RTDETR
 from PIL import Image
 import numpy as np
 import time
 import io
+import os
+import gdown
 
 st.set_page_config(
     page_title="AI Demonstrator — Classroom Engagement",
@@ -278,8 +279,12 @@ section[data-testid="stFileUploadDropzone"] { display: none !important; }
 """, unsafe_allow_html=True)
 
 # ── Model ──────────────────────────────────────────────────────
-MODEL_PATH  = "/content/rtdetr_best.pt"
+MODEL_PATH  = "rtdetr_best.pt"
 CLASS_NAMES = ["Attentive", "Distracted", "Sleepy"]
+
+if not os.path.exists(MODEL_PATH):
+    with st.spinner("Downloading model... (first run only)"):
+        gdown.download("https://drive.google.com/uc?id=1lxcXwQSNLEz1Pg1gTdHdz9m7hG4BtBw9", MODEL_PATH, quiet=False)
 
 @st.cache_resource
 def load_model(path):
